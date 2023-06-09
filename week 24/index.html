@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SWAPI API</title>
+    <link rel="stylesheet" type="text/css" href="styles/style.css" />
+  </head>
+  <body>
+    <h1>The Star Wars</h1>
+    <form id="form">
+      <label for="entity">Entity:</label>
+      <select id="entity">
+        <option value="films">Films</option>
+        <option value="people">People</option>
+        <option value="planets">Planets</option>
+        <option value="species">Species</option>
+        <option value="starships">Starships</option>
+        <option value="vehicles">Vehicles</option>
+      </select>
+      <br />
+      <label for="entityId">Entity ID:</label>
+      <input type="number" id="entityId" min="1" max="10" />
+      <br />
+      <button type="button" onclick="fetchData()">Показать</button>
+    </form>
+    <div id="loading" style="display: none">
+      <div class="loader"></div>
+      <p>Loading...</p>
+    </div>
+    <div id="result"></div>
+    <div class="error" id="error"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
