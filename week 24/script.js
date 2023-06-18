@@ -10,8 +10,14 @@ function fetchData() {
   resultDiv.innerHTML = "";
   errorDiv.innerHTML = "";
 
+  // Проверка выбранной сущности
+  if (!entity) {
+    errorDiv.innerHTML = "Ошибка: Сущность не выбрана";
+    return;
+  }
+
   // Проверка введенного идентификатора
-  if (entityId < 1 || entityId > 10) {
+  if (!entityId || entityId < 1 || entityId > 10) {
     errorDiv.innerHTML =
       "Ошибка: Недопустимое значение (выберите число от 1 до 10)";
     return;
@@ -20,6 +26,20 @@ function fetchData() {
   // Показывать сообщение о загрузке
   loadingDiv.style.display = "block";
 
+  // Определение соответствия сущностей и отображаемых свойств
+  const entityProperties = {
+    films: ["title", "director", "release_date"],
+    people: ["name", "height", "mass", "hair_color", "skin_color"],
+    planets: ["name", "population", "terrain", "climate"],
+    species: ["name", "classification", "language"],
+    starships: ["name", "model", "manufacturer", "crew"],
+    vehicles: ["name", "model", "manufacturer", "passengers"],
+  };
+
+  // Получение свойств для отображения в зависимости от выбранной сущности
+  const propertiesToShow = entityProperties[entity];
+
+  // Запрос к API
   // Запрос к API
   fetch(`https://swapi.dev/api/${entity}/${entityId}`)
     .then((response) => {
@@ -37,17 +57,18 @@ function fetchData() {
       if (Array.isArray(data)) {
         resultDiv.innerHTML = "Результаты: <ul>";
         data.forEach((item) => {
-          if (item.title) {
-            resultDiv.innerHTML += "<li>" + item.title + "</li>";
-          }
+          resultDiv.innerHTML += "<li>";
+          propertiesToShow.forEach((property) => {
+            resultDiv.innerHTML += `${property}: ${item[property]} <br>`;
+          });
+          resultDiv.innerHTML += "</li>";
         });
         resultDiv.innerHTML += "</ul>";
       } else {
-        if (entity === "films") {
-          resultDiv.innerHTML = "Название: " + data.title;
-        } else {
-          resultDiv.innerHTML = "Имя: " + data.name;
-        }
+        resultDiv.innerHTML = "<br>";
+        propertiesToShow.forEach((property) => {
+          resultDiv.innerHTML += `${property}: ${data[property]} <br>`;
+        });
       }
     })
     .catch((error) => {
@@ -56,7 +77,7 @@ function fetchData() {
 
       // Отобразить ошибку
       if (error.message === "Failed to fetch") {
-        errorDiv.innerHTML = "Ошибка: Сервер не доступен";
+        errorDiv.innerHTML = "Ошибка: Сервер недоступен";
       } else {
         errorDiv.innerHTML = "Ошибка: 404  Not Found" + error.message;
       }
