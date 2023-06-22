@@ -40,7 +40,6 @@ function fetchData() {
   const propertiesToShow = entityProperties[entity];
 
   // Запрос к API
-  // Запрос к API
   fetch(`https://swapi.dev/api/${entity}/${entityId}`)
     .then((response) => {
       // Скрыть сообщение о загрузке
